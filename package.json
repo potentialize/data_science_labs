@@ -1,0 +1,8 @@
+{
+  "name": "node",
+  "scripts": {},
+  "license": "ISC",
+  "dependencies": {
+    "mysql": "^2.18.1"
+  }
+}
