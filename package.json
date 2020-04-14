@@ -1,8 +1,9 @@
 {
-  "name": "node",
+  "name": "mysql-tasks",
   "scripts": {},
-  "license": "ISC",
+  "license": "MIT",
   "dependencies": {
+    "dotenv": "^8.2.0",
     "mysql": "^2.18.1"
   }
 }
