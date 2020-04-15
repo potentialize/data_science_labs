@@ -28,9 +28,10 @@ class BatchStream extends Transform {
   }
 
   _flush (callback) {
-    this.push(this.buffer)
-    this.buffer = []
-    this.push(null)
+    if (this.buffer.length > 0) {
+      this.push(this.buffer)
+      this.buffer = []
+    }
     callback()
   }
 }
