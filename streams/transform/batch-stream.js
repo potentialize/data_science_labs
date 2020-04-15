@@ -1,5 +1,8 @@
 const { Transform } = require('stream')
 
+// in: any object
+// out: array of #bufferSize objects
+
 class BatchStream extends Transform {
   constructor (bufferSize) {
     super({

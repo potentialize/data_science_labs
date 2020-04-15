@@ -1,5 +1,7 @@
 const { Writable } = require('stream')
 
+// in: any object
+
 class LogStream extends Writable {
   constructor () {
     super({

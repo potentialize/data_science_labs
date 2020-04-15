@@ -1,5 +1,7 @@
 const { Transform } = require('stream')
-const util = require('util')
+
+// in: file stream
+// out: row of tsv file
 
 class TsvStream extends Transform {
   constructor () {

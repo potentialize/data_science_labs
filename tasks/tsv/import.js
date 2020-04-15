@@ -1,7 +1,7 @@
 const path = require('path')
 const fs = require('fs')
-const TsvStream = require('../../helpers/tsv-stream')
-const BatchStream = require('../../helpers/batch-stream')
+const TsvStream = require('../../streams/transform/tsv-stream')
+const BatchStream = require('../../streams/transform/batch-stream')
 const pool = require('../../helpers/pool')
 const query = require('../../helpers/query')
 
