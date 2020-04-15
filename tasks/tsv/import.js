@@ -8,26 +8,26 @@ const query = require('../../helpers/query')
 const filePath = path.resolve(__dirname, '..', '..', 'data', 'title.ratings.tsv')
 
 const data = fs
-    .createReadStream(filePath, 'utf-8')
-    .pipe(new TsvStream)
-    .pipe(new BatchStream(1000))
+  .createReadStream(filePath, 'utf-8')
+  .pipe(new TsvStream())
+  .pipe(new BatchStream(1000))
 
 const queries = []
 
 data.on('data', async (rows) => {
-    const values = rows.map(([id, rate, votes]) => `(${id}, ${rate}, ${votes})`).join(', ')
+  const values = rows.map(([id, rate, votes]) => `(${id}, ${rate}, ${votes})`).join(', ')
 
-    const sql = `INSERT INTO titleRatings VALUES ${values}`
+  const sql = `INSERT INTO titleRatings VALUES ${values}`
 
-    queries.push(query(sql))
+  queries.push(query(sql))
 })
 
 data.on('finish', async () => {
-    console.log('queries queued...')
-    
-    await Promise.all(queries)
+  console.log('queries queued...')
 
-    console.log('queries finished...')
+  await Promise.all(queries)
 
-    pool().end()
+  console.log('queries finished...')
+
+  pool().end()
 })
