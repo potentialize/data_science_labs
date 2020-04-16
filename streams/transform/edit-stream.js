@@ -32,7 +32,7 @@ class EditStream extends Transform {
       const input = obj[key]
       const func = this.funcs[key]
 
-      obj[key] = func(input)
+      obj[key] = func ? func(input) : input
     }
 
     return obj
