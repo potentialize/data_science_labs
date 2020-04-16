@@ -1,5 +1,6 @@
 const { Writable } = require('stream')
 const query = require('../../helpers/query')
+const mysql = require('mysql')
 
 // in: object (insert single row, object keys map to column)
 //     array of objects (insert multiple rows...)
@@ -64,7 +65,7 @@ class InsertStream extends Writable {
 
     if (value === null) return 'NULL'
 
-    return `'${value}'`
+    return mysql.escape(value)
   }
 }
 

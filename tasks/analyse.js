@@ -4,15 +4,19 @@ const {
   countValue,
   countDuplicates,
   range,
+  size,
 } = require('../analyse')
 
 ;(async () => {
   const results = await Promise.all([
-    count('_test'),
-    countValue('_test', 'text', 'random'),
-    range('_test', 'nr'),
-    countDuplicates('_test', 'nr'),
+    // count('_test'),
+    // countValue('_test', 'text', 'random'),
+    range('nameBasics', 'deathYear'),
+    // size('nameBasics', 'primaryName'),
+    // countDuplicates('nameBasics', 'primaryName'),
   ])
+
+  console.log(results[0])
 
   pool().end()
 })()
