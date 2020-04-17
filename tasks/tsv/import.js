@@ -1,33 +1,27 @@
 const path = require('path')
 const fs = require('fs')
-const TsvStream = require('../../streams/transform/tsv-stream')
-const BatchStream = require('../../streams/transform/batch-stream')
+const {
+  TsvToArrayStream,
+  EditStream,
+  BatchStream,
+  InsertStream,
+} = require('../../streams')
 const pool = require('../../helpers/pool')
-const query = require('../../helpers/query')
 
-const filePath = path.resolve(__dirname, '..', '..', 'data', 'title.ratings.tsv')
+const inFile = path.resolve(__dirname, '..', '..', 'data', 'title.ratings.tsv')
+const outTable = 'titleRatings'
 
-const data = fs
-  .createReadStream(filePath, 'utf-8')
-  .pipe(new TsvStream())
+const callback = ([id, rate, votes]) => ({
+  id: parseInt(id.replace(/^tt0*/, '0')),
+  averageRating: parseFloat(rate) || null,
+  voteCount: parseInt(votes) || 0,
+})
+
+fs.createReadStream(inFile, 'utf-8')
+  .pipe(new TsvToArrayStream())
+  .pipe(new EditStream(callback))
   .pipe(new BatchStream(1000))
-
-const queries = []
-
-data.on('data', async (rows) => {
-  const values = rows.map(([id, rate, votes]) => `(${id}, ${rate}, ${votes})`).join(', ')
-
-  const sql = `INSERT INTO titleRatings VALUES ${values}`
-
-  queries.push(query(sql))
-})
-
-data.on('finish', async () => {
-  console.log('queries queued...')
-
-  await Promise.all(queries)
-
-  console.log('queries finished...')
-
-  pool().end()
-})
+  .pipe(new InsertStream(outTable))
+  .on('finish', () => {
+    pool().end()
+  })
